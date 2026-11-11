@@ -22,22 +22,26 @@ Manifold for preparing ShapeNet dataset
 ```
 ### Install Manifold
 The source code is included in dataset/Manifold. To compile it, run the following commands from the project root:
+```
 cd dataset/Manifold
 mkdir -p build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j4
 cd ../../..
+```
 
 ### Install custom CUDA extensions
 Chamfer3D and pointops are required for Chamfer distance computation and point cloud operations, respectively. Both extensions must be compiled and installed in the target PyTorch environment.
 Run the following commands from the project root:
-
+```
 cd models/Chamfer3D
 python setup.py install
-
+```
+```
 cd models/pointops
 python setup.py install
+```
 
 
 
