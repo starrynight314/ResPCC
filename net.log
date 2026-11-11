@@ -1,0 +1,576 @@
+nohup: ignoring input
+✅ Lookup table loaded successfully.
+Loaded compiled 3D CUDA chamfer distance
+train data has been loading
+val data has been loading
+Experiment Time: 2026-04-04T12:01:24.752433
+Training Arguments: Namespace(aux_lr=0.001, batch_size=1, betas=(0.9, 0.999), bpp_lambda=0.00085, chamfer_coe=0.5, compress_normal=False, dataset='shapenet', density_coe=0.0001, density_radius=0.15, dim=64, dist_coe=0.0001, downsample_rate=[0.2, 0.2, 0.2], epochs=50, gamma=0.5, hidden_dim=128, hyper_channels=48, in_fdim=3, k=8, latent_xyzs_coe=0.01, latent_xyzs_conv_mode='mlp', layer_num=3, log_dir='./logofshapenet', loss_rate=10, lr=0.001, lr_decay_step=10, max_upsample_num=[16, 16, 16], mean_distance_coe=50.0, model_path='/home/niuxueqin/D-PCC/output/2025-12-07T03:13:25.873651/ckpt/ckpt-best.pth', ngroups=4, normal_coe=0.01, omega_normals=0.2, omega_xyzs=0.05, output_path='./output_sem', output_test='./output_xiaorong', p2pl_coe=0.05, packet_loss=True, peak=1.3519483804702759, peak_point=0.02103668823838234, print_freq=1000, pts_num_coe=5e-07, quantize_latent_xyzs=True, resume='', save_freq=1, sparsity_coe=0, std_distance_coe=50.0, sub_point_conv_mode='mlp', test_cube_size=32, test_data_path='/home/niuxueqin/D-PCC/data/shapenet_test/shapenet_test_cube32.pkl', train_cube_size=32, train_data_path='/home/niuxueqin/D-PCC/data/shapenet_test/shapenet_train_cube32.pkl', val_cube_size=32, val_data_path='/home/niuxueqin/D-PCC/data/shapenet_test/shapenet_val_cube32.pkl', warmup_iters=1000, weight_decay=0, xyz_dim=8, xyz_penalty=2.0)
+Model Architecture: AutoEncoder(
+  (lower_bound): LowerBound()
+  (pre_conv): Sequential(
+    (0): Conv1d(3, 128, kernel_size=(1,), stride=(1,))
+    (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+    (2): ReLU(inplace=True)
+    (3): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+  )
+  (encoder): Encoder(
+    (encoder_layers): ModuleList(
+      (0): DownsampleLayer(
+        (pre_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+        (feats_agg_nn): PointTransformerLayer(
+          (w_qs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_ks): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_vs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (conv_delta): Sequential(
+            (0): Conv2d(3, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv_gamma): Sequential(
+            (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (post_conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+        )
+        (position_embedding_nn): PositionEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv2d(4, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (attn_nn): Sequential(
+            (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (density_embedding_nn): DensityEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv1d(1, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+        (p_adaptive_nn): ChannelAwareConditioning(
+          (frequency_embedding): Sequential(
+            (0): Linear(in_features=1, out_features=64, bias=True)
+            (1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+            (2): ReLU(inplace=True)
+            (3): Linear(in_features=64, out_features=128, bias=True)
+          )
+          (base_p_nn): Sequential(
+            (0): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+          (branch_gates): Sequential(
+            (0): Linear(in_features=128, out_features=64, bias=True)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=64, out_features=3, bias=True)
+            (3): Sigmoid()
+          )
+        )
+        (post_conv): Conv1d(256, 64, kernel_size=(1,), stride=(1,))
+      )
+      (1): DownsampleLayer(
+        (pre_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+        (feats_agg_nn): PointTransformerLayer(
+          (w_qs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_ks): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_vs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (conv_delta): Sequential(
+            (0): Conv2d(3, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv_gamma): Sequential(
+            (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (post_conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+        )
+        (position_embedding_nn): PositionEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv2d(4, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (attn_nn): Sequential(
+            (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (density_embedding_nn): DensityEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv1d(1, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+        (p_adaptive_nn): ChannelAwareConditioning(
+          (frequency_embedding): Sequential(
+            (0): Linear(in_features=1, out_features=64, bias=True)
+            (1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+            (2): ReLU(inplace=True)
+            (3): Linear(in_features=64, out_features=128, bias=True)
+          )
+          (base_p_nn): Sequential(
+            (0): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+          (branch_gates): Sequential(
+            (0): Linear(in_features=128, out_features=64, bias=True)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=64, out_features=3, bias=True)
+            (3): Sigmoid()
+          )
+        )
+        (post_conv): Conv1d(256, 64, kernel_size=(1,), stride=(1,))
+      )
+      (2): DownsampleLayer(
+        (pre_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+        (feats_agg_nn): PointTransformerLayer(
+          (w_qs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_ks): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (w_vs): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+          (conv_delta): Sequential(
+            (0): Conv2d(3, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (conv_gamma): Sequential(
+            (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (post_conv): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+        )
+        (position_embedding_nn): PositionEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv2d(4, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+          (attn_nn): Sequential(
+            (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+          )
+        )
+        (density_embedding_nn): DensityEmbeddingLayer(
+          (pre_nn): Sequential(
+            (0): Conv1d(1, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+        )
+        (p_adaptive_nn): ChannelAwareConditioning(
+          (frequency_embedding): Sequential(
+            (0): Linear(in_features=1, out_features=64, bias=True)
+            (1): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+            (2): ReLU(inplace=True)
+            (3): Linear(in_features=64, out_features=128, bias=True)
+          )
+          (base_p_nn): Sequential(
+            (0): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (2): ReLU(inplace=True)
+            (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+            (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+            (5): ReLU(inplace=True)
+            (6): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+          )
+          (branch_gates): Sequential(
+            (0): Linear(in_features=128, out_features=64, bias=True)
+            (1): ReLU(inplace=True)
+            (2): Linear(in_features=64, out_features=3, bias=True)
+            (3): Sigmoid()
+          )
+        )
+        (post_conv): Conv1d(256, 64, kernel_size=(1,), stride=(1,))
+      )
+    )
+  )
+  (h_a): Sequential(
+    (0): Conv2d(64, 48, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): Conv2d(48, 48, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2))
+    (3): ReLU(inplace=True)
+    (4): Conv2d(48, 48, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  )
+  (z_eblock): EntropyBottleneck(
+    (likelihood_lower_bound): LowerBound()
+  )
+  (h_s_main): Sequential(
+    (0): ConvTranspose2d(48, 48, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): ConvTranspose2d(48, 48, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2), output_padding=(1, 1))
+    (3): ReLU(inplace=True)
+  )
+  (h_s_feats_means_head): ConvTranspose2d(48, 64, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2), output_padding=(1, 1))
+  (h_s_feats_scales_head): Sequential(
+    (0): ConvTranspose2d(48, 64, kernel_size=(5, 5), stride=(2, 2), padding=(2, 2), output_padding=(1, 1))
+    (1): Softplus(beta=1, threshold=20)
+    (2): LowerBound()
+  )
+  (gaussian_conditional_feats): GaussianConditional(
+    (likelihood_lower_bound): LowerBound()
+    (lower_bound_scale): LowerBound()
+  )
+  (restoration_net): GeometryGuidedRestorationNet(
+    (conv1): Sequential(
+      (0): Conv2d(262, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+      (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    )
+    (conv2): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+      (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    )
+    (attn_conv): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+      (1): Sigmoid()
+    )
+    (channel_mlp): Sequential(
+      (0): Conv1d(128, 128, kernel_size=(1,), stride=(1,), bias=False)
+      (1): GroupNorm(4, 128, eps=1e-05, affine=True)
+      (2): ReLU(inplace=True)
+      (3): Conv1d(128, 128, kernel_size=(1,), stride=(1,), bias=False)
+      (4): GroupNorm(4, 128, eps=1e-05, affine=True)
+      (5): ReLU(inplace=True)
+    )
+    (conv_out): Conv1d(128, 64, kernel_size=(1,), stride=(1,))
+  )
+  (refinement_net): FeatureRefinementModule(
+    (ln): LayerNorm((64,), eps=1e-05, elementwise_affine=True)
+    (q_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+    (k_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+    (v_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+    (out_conv): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+    (softmax): Softmax(dim=-1)
+  )
+  (decoder): Decoder(
+    (decoder_layers): ModuleList(
+      (0): ModuleList(
+        (0): UpsampleLayer(
+          (xyzs_upsample_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_upsample_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+        (1): UpsampleNumLayer(
+          (upsample_num_nn): Sequential(
+            (0): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+            (1): ReLU()
+            (2): Conv1d(128, 1, kernel_size=(1,), stride=(1,))
+            (3): Sigmoid()
+          )
+        )
+        (2): RefineLayer(
+          (xyzs_refine_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_refine_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+      )
+      (1): ModuleList(
+        (0): UpsampleLayer(
+          (xyzs_upsample_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_upsample_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+        (1): UpsampleNumLayer(
+          (upsample_num_nn): Sequential(
+            (0): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+            (1): ReLU()
+            (2): Conv1d(128, 1, kernel_size=(1,), stride=(1,))
+            (3): Sigmoid()
+          )
+        )
+        (2): RefineLayer(
+          (xyzs_refine_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_refine_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+      )
+      (2): ModuleList(
+        (0): UpsampleLayer(
+          (xyzs_upsample_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_upsample_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(4, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+        (1): UpsampleNumLayer(
+          (upsample_num_nn): Sequential(
+            (0): Conv1d(64, 128, kernel_size=(1,), stride=(1,))
+            (1): ReLU()
+            (2): Conv1d(128, 1, kernel_size=(1,), stride=(1,))
+            (3): Sigmoid()
+          )
+        )
+        (2): RefineLayer(
+          (xyzs_refine_nn): XyzsUpsampleLayer(
+            (weight_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 43, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+            (scale_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 1, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+          (feats_refine_nn): FeatsUpsampleLayer(
+            (feats_nn): SubPointConv(
+              (mlp): Sequential(
+                (0): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+                (1): LeakyReLU(negative_slope=0.2, inplace=True)
+                (2): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+                (3): GroupNorm(4, 128, eps=1e-05, affine=True)
+                (4): LeakyReLU(negative_slope=0.2, inplace=True)
+                (5): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+Optimizers and LR scheduler configured successfully for Hyperprior model.
